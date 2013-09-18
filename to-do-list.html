@@ -1,0 +1,102 @@
+<html>
+<head>
+  <title>To-do List</title>
+  <style type="text/css">
+    #templates { display: none; }
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+    html {
+      font-family: 'Open Sans', Verdana, Tahoma;
+      background-color: #B1F2D4;
+    }
+    h2, #list, #new-item {
+      margin-left: auto;
+      margin-right: auto;
+      width: 200px;
+      padding: 10px 20px 10px 20px;
+      border-radius: 30px;
+    }
+    #list {
+      background: #3E2EF0;
+    }
+    #list h3 {
+      font-style: italic;
+      border: 1px solid black;
+    }
+    #list h5 {
+      font-weight: normal;
+    }
+    #new-item {
+      background-color: #7663B0;
+    }
+  </style>
+  <h2>To-Do List:</h2>
+</head>
+<body>
+
+  <div id="new-item">
+    <label>Add an item:</label>
+    <input id="user-input" type="text" />
+    <input id ="submit-button" type="button" value="Submit!" /> 
+  </div>
+ 
+<div id="list"> </div>
+
+  <div id="templates" class="tasks">
+    <script class="tasks" type="text/template">
+      <div class="tasks">
+        <h3> <%= action %></h3>
+        <h5> Completed: <%= status %> </h5>
+        <input class="box" type="checkbox" name="done" />
+      </div>
+    </script>
+  </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+<script type="text/javascript">
+  var lisTemplateHtml = $('#templates .tasks').html();
+  var lisTemplate = _.template(lisTemplateHtml);
+  var newLisHtml;
+  var tasks = [
+  {
+    action: 'Create TODO list',
+    status: false
+  },
+  {
+    action: 'Implement Exercise',
+    status: false
+  }
+ ];
+
+var renderList = function () {
+  for (var t = 0; t < tasks.length; t++) {
+    newLisHtml = lisTemplate(tasks[t]);
+    $('#list').append(newLisHtml);
+  }
+};
+renderList(tasks);
+
+$(document).on('click', '#submit-button', function(){
+  var action = $('#user-input').val();
+  var status = false
+  var newLisHtml = lisTemplate({action: action, status: status});
+  $('#list').append(newLisHtml);
+});
+    
+$(document).keypress('#user-input', function(e) {
+  if(e.which === 13) {
+    jQuery(this).blur();
+    jQuery('#submit-button').focus().click();
+  }
+});
+$(document).on('change', '.box', function() {
+  var indexed = $('.box').index(this);
+  // $('indexed').parent().index();
+  tasks[indexed].status = !tasks[indexed].status;
+  $('#list').empty();
+  renderList(tasks);
+});
+  </script>
+</body>
+</html>
