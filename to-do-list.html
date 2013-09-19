@@ -80,8 +80,9 @@ renderList(tasks);
 $(document).on('click', '#submit-button', function(){
   var action = $('#user-input').val();
   var status = false
-  var newLisHtml = lisTemplate({action: action, status: status});
-  $('#list').append(newLisHtml);
+  tasks.push({action: action, status: status});
+  $('#list').empty();
+  renderList(tasks);
 });
     
 $(document).keypress('#user-input', function(e) {
@@ -92,7 +93,6 @@ $(document).keypress('#user-input', function(e) {
 });
 $(document).on('change', '.box', function() {
   var indexed = $('.box').index(this);
-  // $('indexed').parent().index();
   tasks[indexed].status = !tasks[indexed].status;
   $('#list').empty();
   renderList(tasks);
